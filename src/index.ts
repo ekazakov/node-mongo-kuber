@@ -1,6 +1,7 @@
 import * as dotenv from 'dotenv';
 import { generateTransaction } from './generate-transaction.js';
 import { fastify } from 'fastify';
+import { readTransactions, saveTransaction } from './mongo.js';
 
 //set up the env variables from './env' or './dev.env'
 //to add more presets change package.json
@@ -15,18 +16,19 @@ const _fastify = fastify({
 });
 
 function createTransactionStore() {
-  const transactions = new Array(0);
-  // let pointer = 0;
+  // const transactions = new Array(0);
 
   return {
-    addTransaction(t: any) {
-      transactions.push(t);
-      // pointer++;
-      // pointer = pointer % 100;
+    async addTransaction(t: any) {
+      // transactions.push(t);
+      console.log(t);
+      await saveTransaction(t);
     },
 
-    getAll() {
-      return transactions;
+    async getAll() {
+      const data = (await readTransactions()) ?? [];
+      console.log('data:', data);
+      return data;
     },
   };
 }
@@ -41,14 +43,15 @@ _fastify.get('/transaction', (req, res) => {
   res.send(generateTransaction(new Date()));
 });
 
-_fastify.get('/transactions', (req, res) => {
-  res.send(tStore.getAll());
+_fastify.get('/transactions', async (req, res) => {
+  const data = await tStore.getAll();
+  res.send(data);
 });
 
-_fastify.post('/create_transaction', (req, res) => {
+_fastify.post('/create_transaction', async (req, res) => {
   const transaction = generateTransaction(new Date());
-  tStore.addTransaction(transaction);
-  res.send(transaction);
+  await tStore.addTransaction(transaction);
+  res.status(204);
 });
 
 _fastify.listen({ port }, function (err, address) {
