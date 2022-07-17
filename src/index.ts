@@ -11,16 +11,15 @@ dotenv.config({
 
 const port: number = Number(process.env.PORT) || 3000;
 
+console.log(JSON.stringify(process.env, null, '\t'));
+
 const _fastify = fastify({
   logger: true,
 });
 
 function createTransactionStore() {
-  // const transactions = new Array(0);
-
   return {
     async addTransaction(t: any) {
-      // transactions.push(t);
       console.log(t);
       await saveTransaction(t);
     },
@@ -54,7 +53,7 @@ _fastify.post('/create_transaction', async (req, res) => {
   res.status(204);
 });
 
-_fastify.listen({ port }, function (err, address) {
+_fastify.listen({ port, host: '0.0.0.0' }, function (err, address) {
   if (err) {
     _fastify.log.error(err);
     process.exit(1);

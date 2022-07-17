@@ -1,0 +1,7 @@
+.dockerignore
+.gitignore
+.prettierrc
+Dockerfile
+transactions.http
+node_modules
+docker-compose.yml

@@ -1,10 +1,13 @@
 import { Document, FindCursor, MongoClient, WithId } from 'mongodb';
 
-const user = 'root';
-const pass = 'root';
+const user = process.env.MONGODB_USER;
+const pass = process.env.MONGODB_PASSWORD;
+const url = process.env.MONGODB_URL;
+const port = process.env.MONGODB_PORT;
+// localhost:27017
 export function createMongoClient() {
-  const url = `mongodb://${user}:${pass}@localhost:27017/?maxPoolSize=20`;
-  return new MongoClient(url);
+  const fullAddress = `mongodb://${user}:${pass}@${url}:${port}/?maxPoolSize=20`;
+  return new MongoClient(fullAddress);
 }
 
 const client = createMongoClient();
