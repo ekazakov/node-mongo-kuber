@@ -1,7 +1,10 @@
 .dockerignore
 .gitignore
+.git
+.idea
 .prettierrc
 Dockerfile
 transactions.http
 node_modules
 docker-compose.yml
+

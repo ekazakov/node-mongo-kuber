@@ -1,5 +1,30 @@
-version: "3.9"
+version: '3.9'
 services:
-  node:
+  node-app:
     build:
-      dockerfile: .
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    environment:
+      - MONGODB_USER=admin
+      - MONGODB_PASSWORD=password
+      - MONGODB_SERVER=mongodb
+      - MONGODB_PORT=27017
+    depends_on:
+      - mongodb
+
+  mongodb:
+    image: mongo
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongodb-data:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=password
+
+volumes:
+  mongodb-data:
+    driver: local
+

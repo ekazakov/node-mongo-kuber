@@ -2,7 +2,7 @@ import { Document, FindCursor, MongoClient, WithId } from 'mongodb';
 
 const user = process.env.MONGODB_USER;
 const pass = process.env.MONGODB_PASSWORD;
-const url = process.env.MONGODB_URL;
+const url = process.env.MONGODB_SERVER;
 const port = process.env.MONGODB_PORT;
 // localhost:27017
 export function createMongoClient() {
