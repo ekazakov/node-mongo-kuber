@@ -1,0 +1,48 @@
+# https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-app
+  labels:
+    app: node-app
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: node-app
+      labels:
+        app: node-app
+    spec:
+      containers:
+        - name: node-app
+          image: vissper/node-app:1.0
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: MONGODB_USER
+              value: 'admin'
+            - name: MONGODB_PASSWORD
+              value: 'password'
+            - name: MONGODB_SERVER
+              value: 'mongo-service'
+            - name: MONGODB_PORT
+              value: '27017'
+          ports:
+            - containerPort: 3000
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: node-app
+---
+# https://kubernetes.io/docs/concepts/services-networking/service/
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-app-service
+spec:
+  selector:
+    app: node-app
+  type: LoadBalancer
+  ports:
+    - port: 3000
+      targetPort: 3000
+      protocol: TCP

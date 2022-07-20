@@ -6,3 +6,9 @@ GET http://localhost:3000/transactions
 
 
 ###
+
+POST http://192.168.64.3:30132/create_transaction
+
+
+###
+GET http://192.168.64.3:30132/transactions
