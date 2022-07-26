@@ -1,13 +1,8 @@
-import * as dotenv from 'dotenv';
+import './init-config.js';
+import fs from 'node:fs';
 import { generateTransaction } from './generate-transaction.js';
 import { fastify } from 'fastify';
 import { readTransactions, saveTransaction } from './mongo.js';
-
-//set up the env variables from './env' or './dev.env'
-//to add more presets change package.json
-dotenv.config({
-  path: process.env.NODE_ENV === 'production' ? './.env' : './dev.env',
-});
 
 const port: number = Number(process.env.PORT) || 3000;
 
@@ -51,6 +46,21 @@ _fastify.post('/create_transaction', async (req, res) => {
   const transaction = generateTransaction(new Date());
   await tStore.addTransaction(transaction);
   res.status(204);
+});
+
+const dir = './tmp';
+
+_fastify.post('/save', async () => {
+  const data = await tStore.getAll();
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir);
+  }
+  fs.writeFileSync(`${dir}/data.json`, JSON.stringify(data), { encoding: 'utf-8', flag: 'w+' });
+});
+
+_fastify.get('/read', (req, res) => {
+  const data = fs.readFileSync(`${dir}/data.json`);
+  res.send(data);
 });
 
 _fastify.listen({ port, host: '0.0.0.0' }, function (err, address) {

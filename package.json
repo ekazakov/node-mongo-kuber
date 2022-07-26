@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "npm run build && NODE_ENV=production node build/index.js",
-    "build": "rimraf ./build && tsc",
+    "start": "npm run build && NODE_ENV=development node build/index.js",
+    "prod": " NODE_ENV=development node build/index.js",
+    "build": "rimraf ./build && tsc && cp ./dev.env ./build",
     "dev": "NODE_ENV=development nodemon ./src/index.ts"
   },
   "license": "Unlicensed",
