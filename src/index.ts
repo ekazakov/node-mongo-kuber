@@ -6,6 +6,7 @@ import { readTransactions, saveTransaction } from './mongo.js';
 
 const port: number = Number(process.env.PORT) || 3000;
 
+console.log("__dirname:", __dirname);
 console.log(JSON.stringify(process.env, null, '\t'));
 
 const _fastify = fastify({
@@ -70,3 +71,7 @@ _fastify.listen({ port, host: '0.0.0.0' }, function (err, address) {
   }
   console.log(`Server started on ${port} port\nMode - ${process.env.NODE_ENV}`);
 });
+
+_fastify.post('/exit', () => {
+  process.exit(1);
+})

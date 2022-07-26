@@ -28,7 +28,13 @@ spec:
               value: '27017'
           ports:
             - containerPort: 3000
+          volumeMounts:
+            - mountPath: /app/data
+              name: data-volume
       restartPolicy: Always
+      volumes:
+        - name: data-volume
+          emptyDir: {}
   selector:
     matchLabels:
       app: node-app

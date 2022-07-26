@@ -15,6 +15,7 @@ services:
       # overriding src and node_modules to update app in container without rebuild
       - "./src:/app/src:ro"
       - "./node_modules:/app/node_modules"
+      - "data-volume:/app/data"
     depends_on:
       - mongodb
 
@@ -31,4 +32,4 @@ services:
 volumes:
   mongodb-data:
     driver: local
-
+  data-volume:
