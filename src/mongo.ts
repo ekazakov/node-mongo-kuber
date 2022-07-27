@@ -7,7 +7,9 @@ const port = process.env.MONGODB_PORT;
 // localhost:27017
 export function createMongoClient() {
   const fullAddress = `mongodb://${user}:${pass}@${url}:${port}/?maxPoolSize=20`;
-  return new MongoClient(fullAddress);
+
+  console.log('MONGO URL:', fullAddress);
+  return new MongoClient(fullAddress, { loggerLevel: 'debug' });
 }
 
 const client = createMongoClient();
@@ -20,6 +22,7 @@ export async function saveTransaction(transaction: any) {
   } catch (e) {
     console.error(e);
   } finally {
+    console.log('CLOSING client', client);
     await client.close();
   }
 }
@@ -37,7 +40,7 @@ export async function readTransactions() {
   } catch (e) {
     console.error(e);
   } finally {
-    await cursor.close();
-    await client.close();
+    await cursor?.close();
+    await client?.close();
   }
 }

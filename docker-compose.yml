@@ -20,7 +20,7 @@ services:
       - mongodb
 
   mongodb:
-    image: mongo
+    image: mongo:5.0
     ports:
       - '27017:27017'
     volumes:
@@ -33,3 +33,4 @@ volumes:
   mongodb-data:
     driver: local
   data-volume:
+    driver: local

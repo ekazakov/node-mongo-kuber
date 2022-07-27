@@ -4,6 +4,18 @@ POST http://localhost:3000/create_transaction
 
 GET http://localhost:3000/transactions
 
+###
+GET http://localhost:3000/read
+
+###
+POST http://localhost:3000/exit
+
+###
+POST http://localhost:3000/save
+
+###
+DELETE http://localhost:3000/remove
+
 
 ###
 
@@ -12,3 +24,4 @@ POST http://node.test/create_transaction
 
 ###
 GET http://node.test/transactions
+
