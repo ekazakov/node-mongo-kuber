@@ -29,12 +29,15 @@ spec:
           ports:
             - containerPort: 3000
           volumeMounts:
-            - mountPath: /app/data
+            - mountPath: /app/tmp
               name: data-volume
       restartPolicy: Always
       volumes:
         - name: data-volume
-          emptyDir: {}
+          # emptyDir: {}
+          hostPath:
+            path: /data
+            type: DirectoryOrCreate
   selector:
     matchLabels:
       app: node-app
