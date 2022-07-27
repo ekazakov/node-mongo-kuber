@@ -12,4 +12,4 @@ ENV MONGODB_PORT="27017"
 
 EXPOSE 3000
 
-CMD [ "npm", "run", "dev" ]
+CMD [ "npm", "run", "start" ]

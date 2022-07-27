@@ -44,3 +44,15 @@ export async function readTransactions() {
     await client?.close();
   }
 }
+
+export async function deleteAllTransactions() {
+  try {
+    await client.connect();
+    const collection = client.db('main').collection('logs');
+    await collection.deleteMany({});
+  } catch (e) {
+    console.error(e);
+  } finally {
+    await client?.close();
+  }
+}

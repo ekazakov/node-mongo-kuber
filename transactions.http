@@ -5,6 +5,11 @@ POST http://localhost:3000/create_transaction
 GET http://localhost:3000/transactions
 
 ###
+
+DELETE http://localhost:3000/transactions
+
+###
+
 GET http://localhost:3000/read
 
 ###
@@ -17,11 +22,29 @@ POST http://localhost:3000/save
 DELETE http://localhost:3000/remove
 
 
+
+#############################################################
+#############################################################
+
 ###
-
 POST http://node.test/create_transaction
-
 
 ###
 GET http://node.test/transactions
 
+###
+
+DELETE http://node.test/transactions
+
+###
+
+GET http://node.test/read
+
+###
+POST http://node.test/exit
+
+###
+POST http://node.test/save
+
+###
+DELETE http://node.test/remove

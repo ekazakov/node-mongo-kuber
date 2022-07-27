@@ -2,7 +2,7 @@ import './init-config.js';
 import fs from 'node:fs';
 import { generateTransaction } from './generate-transaction.js';
 import { fastify } from 'fastify';
-import { readTransactions, saveTransaction } from './mongo.js';
+import { readTransactions, saveTransaction, deleteAllTransactions } from './mongo.js';
 
 const port: number = Number(process.env.PORT) || 3000;
 
@@ -24,6 +24,10 @@ function createTransactionStore() {
       console.log('data:', data);
       return data;
     },
+
+    async deleteAll() {
+      await deleteAllTransactions();
+    }
   };
 }
 
@@ -40,6 +44,11 @@ _fastify.get('/transaction', (req, res) => {
 _fastify.get('/transactions', async (req, res) => {
   const data = await tStore.getAll();
   res.send(data);
+});
+
+_fastify.delete('/transactions', async (req, res) => {
+  await tStore.deleteAll();
+  res.status(204);
 });
 
 _fastify.post('/create_transaction', async (req, res) => {

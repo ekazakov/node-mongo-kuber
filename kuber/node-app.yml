@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: node-app
-          image: vissper/node-app:1.0
+          image: vissper/node-app:1.1
           imagePullPolicy: IfNotPresent
           env:
             - name: MONGODB_USER
