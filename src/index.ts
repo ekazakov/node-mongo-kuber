@@ -1,6 +1,7 @@
 import './init-config.js';
 import fs from 'node:fs';
 import { generateTransaction } from './generate-transaction.js';
+import { faker } from '@faker-js/faker';
 import { fastify } from 'fastify';
 import { readTransactions, saveTransaction, deleteAllTransactions } from './mongo.js';
 
@@ -27,23 +28,31 @@ function createTransactionStore() {
 
     async deleteAll() {
       await deleteAllTransactions();
-    }
+    },
   };
 }
 
 const tStore = createTransactionStore();
 
+const appName = `${faker.name.firstName()}-${faker.name.lastName()}`;
+
 _fastify.get('/', (req, res) => {
-  res.send({ hello: 'works' });
+  res.send({ app: appName, hello: 'works' });
 });
 
 _fastify.get('/transaction', (req, res) => {
-  res.send(generateTransaction(new Date()));
+  res.send({
+    app: appName,
+    transaction: generateTransaction(new Date()),
+  });
 });
 
 _fastify.get('/transactions', async (req, res) => {
   const data = await tStore.getAll();
-  res.send(data);
+  res.send({
+    app: appName,
+    data,
+  });
 });
 
 _fastify.delete('/transactions', async (req, res) => {
@@ -59,28 +68,42 @@ _fastify.post('/create_transaction', async (req, res) => {
 
 const dir = './tmp';
 
-_fastify.post('/exit', () => {
-  process.exit(1);
+_fastify.post('/exit', (req, res) => {
+  res.send({
+    app: appName,
+    status: 'Exited',
+  });
+  setTimeout(() => {
+    process.exit(1);
+  }, 50);
 });
 
-_fastify.post('/save', async () => {
+_fastify.post('/save', async (req, res) => {
   const data = await tStore.getAll();
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir);
   }
   fs.writeFileSync(`${dir}/data.json`, JSON.stringify(data), { encoding: 'utf-8', flag: 'w+' });
+  res.send({
+    app: appName,
+    status: 'Saved',
+  });
 });
 
-_fastify.delete('/remove', async () => {
+_fastify.delete('/remove', async (req, res) => {
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir);
   }
   fs.unlinkSync(`${dir}/data.json`);
+  res.send({
+    app: appName,
+    status: 'Removed',
+  });
 });
 
 _fastify.get('/read', (req, res) => {
   const data = fs.readFileSync(`${dir}/data.json`, { encoding: 'utf-8' });
-  res.send(data);
+  res.send({ app: appName, data });
 });
 
 _fastify.listen({ port, host: '0.0.0.0' }, function (err, address) {

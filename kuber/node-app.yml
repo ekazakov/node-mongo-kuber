@@ -6,7 +6,7 @@ metadata:
   labels:
     app: node-app
 spec:
-  replicas: 1
+  replicas: 2
   template:
     metadata:
       name: node-app
@@ -16,7 +16,7 @@ spec:
       containers:
         - name: node-app
           image: vissper/node-app:1.1
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           env:
             - name: MONGODB_USER
               value: 'admin'
@@ -34,10 +34,14 @@ spec:
       restartPolicy: Always
       volumes:
         - name: data-volume
+          # emptyDir example
           # emptyDir: {}
-          hostPath:
-            path: /data
-            type: DirectoryOrCreate
+          # simple host path example
+          # hostPath:
+          #   path: /data
+          #   type: DirectoryOrCreate
+          persistentVolumeClaim:
+            claimName: host-pvc
   selector:
     matchLabels:
       app: node-app
@@ -50,7 +54,7 @@ metadata:
 spec:
   selector:
     app: node-app
-#  type: LoadBalancer
+  #  type: LoadBalancer
   # using cluster ip to hide service and get access only through ingress
   type: ClusterIP
   ports:
